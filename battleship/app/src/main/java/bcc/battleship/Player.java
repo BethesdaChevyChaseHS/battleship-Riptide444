@@ -3,9 +3,19 @@ import bcc.battleship.Constants;
 
 public class Player {
   
+    private Ship[] ships;
+    private Grid myGrid;
+    private Grid opponentGrid;
+
     // Constructor: Initialize the grids and the ships.
     public Player() {
+        this.myGrid = new Grid();
+        this.opponentGrid = new Grid();
+        this.ships = new Ship[5];
 
+        for (int i = 0; i < 5; i++) {
+            this.ships[i] = new Ship(Constants.SHIP_LENGTHS[i]);
+        }
     }
     
     /**
@@ -15,8 +25,9 @@ public class Player {
      */
     
     public boolean chooseShipLocation(int index, int row, int col, int direction) {
-        
-        return false;
+        ships[index].setLocation(row, col);
+        ships[index].setDirection(direction);
+        return myGrid.addShip(ships[index]);
     }
    
     /**
@@ -26,15 +37,21 @@ public class Player {
      *
      */
     public boolean recordOpponentGuess(int row, int col) {
-        return false;
+        if (myGrid.hasShip(row, col)) {
+            myGrid.markHit(row, col);
+            return true;
+        } else {
+            myGrid.markMiss(row, col);
+            return false;
+        }
     }
     
     
     public Grid getMyGrid() {
-        return null;
+        return myGrid;
     }
     
     public Grid getOpponentGrid() {
-        return null;
+        return opponentGrid;
     }
 }
